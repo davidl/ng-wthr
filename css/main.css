@@ -355,7 +355,7 @@ h2 {
     font-family: "PT Sans Narrow", sans-serif;
 }
 
-h1 { /* app title */
+h1 {
     padding: 0 1ex;
     font-size: 4.5em;
     line-height: 1;
@@ -363,19 +363,7 @@ h1 { /* app title */
     margin: 0;
     padding: 0 1ex;
     text-align: center;
-    /* 3D Text: http://markdotto.com/playground/3d-text/ */
-    text-shadow:    0 1px 0 #f60,
-                    0 2px 0 #c9c9c9,
-                    0 3px 0 #bbb,
-                    0 4px 0 #b9b9b9,
-                    0 5px 0 #aaa,
-                    0 6px 1px rgba(0, 0, 0, .1),
-                    0 0 5px rgba(0, 0, 0, .1),
-                    0 1px 3px rgba(0, 0, 0, .3),
-                    0 3px 5px rgba(0, 0, 0, .2),
-                    0 5px 10px rgba(0, 0, 0, .25),
-                    0 10px 10px rgba(0, 0, 0, .2),
-                    0 20px 20px rgba(155, 155, 155, .15);
+    text-shadow: 0 1px 0 #f60, 0 2px 0 #c9c9c9, 0 3px 0 #bbb;
 }
 
 form { text-align: center; }
@@ -383,8 +371,7 @@ form { text-align: center; }
 form .icon-spin5 {
     color: #999;
     margin-top: 1ex;
-    opacity: 0;
-    transition: opacity 1s;
+    transition: opacity 0.2s;
 }
 
 form.loading .icon-spin5,
@@ -460,11 +447,13 @@ h2 {
     z-index: -1;
 }
 
-.generatedcontent h2[data-code^="2"]:before { content: ''; } /* thunderstorm */
+.lt-ie9 .generatedcontent h2:before { font-size: 5em; }
+
+.generatedcontent h2[data-code^="2"]:before { content: '\e802'; } /* thunderstorm */
 .generatedcontent h2[data-code^="3"]:before { content: '\e804'; } /* drizzle */
 .generatedcontent h2[data-code^="5"]:before { content: '\e803'; } /* rain */
 .generatedcontent h2[data-code^="6"]:before { content: '\e805'; } /* snow */
-.generatedcontent h2[data-code^="7"]:before { content: ''; } /* atmosphere */
+.generatedcontent h2[data-code^="7"]:before { content: '\e806'; } /* atmosphere */
 .generatedcontent h2[data-code^="8"]:before { content: '\e807'; } /* clouds */
 .generatedcontent h2[data-code^="9"]:before { /* extreme */
     color: #B22;
@@ -482,13 +471,12 @@ dd { margin: 0; }
 /* current, low and high temps: */
 .now + dd {
     font-size: 5em;
+    font-weight: bold;
     margin-top: -0.5ex;
     text-align: center;
     text-indent: 0.76ex; /* adjust for degree symbol */
     width: 100%;
 }
-
-.now + dd .deg { color: #999; }
 
 .low,
 .low + dd,
@@ -637,20 +625,13 @@ textarea[contenteditable] { -webkit-appearance: none; }
 }
 
 @media only screen and (min-width: 600px) {
-
 	h1 { font-size: 5.5em; }
 	#results { margin-top: 2em; }
 }
 
 @media only screen and (min-width: 768px) {
-
 	h1 { font-size: 6.5em; }
 	
-}
-
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-       only screen and (min-resolution: 144dpi) {
-    /* Style adjustments for viewports that meet the condition */
 }
 
 /* Switch styles for units conversion */
@@ -698,7 +679,7 @@ textarea[contenteditable] { -webkit-appearance: none; }
         vertical-align: middle;
         width: 50%;
         z-index: 2;
-}
+    }
 
     .switch .slide-button {
         background-color: #FA5B3C;
@@ -736,8 +717,6 @@ textarea[contenteditable] { -webkit-appearance: none; }
              -o-box-sizing: border-box;
                 box-sizing: border-box;
     }
-
-    .switch input:focus + label { outline: 1px dotted #888; }
 
     .switch input:checked + label {
         color: #FFF;
