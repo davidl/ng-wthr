@@ -335,8 +335,6 @@ body {
     background-color: #FFE;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#FFE), to(#DDD));
     background-image: -webkit-linear-gradient(top, #FFE, #DDD);
-    background-image:    -moz-linear-gradient(top, #FFE, #DDD);
-    background-image:      -o-linear-gradient(top, #FFE, #DDD);
     background-image:         linear-gradient(to bottom, #FFE, #DDD);
     color: #444;
     font-family: "Open Sans", sans-serif;
@@ -344,8 +342,7 @@ body {
 }
 
 .wrapper {
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto 1em;
     max-width: 36em;
 }
 
@@ -370,8 +367,7 @@ form { text-align: center; }
 
 form .icon-spin5 {
     color: #999;
-    margin-top: 1ex;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
 }
 
 form.loading .icon-spin5,
@@ -392,8 +388,14 @@ label[for=place] {
 .place-error {
     color: #B22;
     display: block;
-    visibility: hidden;
+    font-size: 0.9em;
+    opacity: 0;
+    text-indent: -7.6ex;
+    transition: all .4s ease-in;
 }
+
+/* .ng-touched is not available in Angular 1.2.x */
+/*.ng-touched ~ .place-error { opacity: 1; }*/
 
 .error .place-error {
     text-indent: -4ex;
@@ -615,9 +617,7 @@ textarea[contenteditable] { -webkit-appearance: none; }
 .clearfix { *zoom: 1; }
 
 /* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   Theses examples override the primary ('mobile first') styles.
-   Modify as content requires.
+   Media Queries
    ========================================================================== */
 
 @media only screen and (min-width: 480px) {
@@ -626,7 +626,7 @@ textarea[contenteditable] { -webkit-appearance: none; }
 
 @media only screen and (min-width: 600px) {
 	h1 { font-size: 5.5em; }
-	#results { margin-top: 2em; }
+	#results { margin-top: 1em; }
 }
 
 @media only screen and (min-width: 768px) {
@@ -639,13 +639,8 @@ textarea[contenteditable] { -webkit-appearance: none; }
 
     /* ------------------------------------------
     CSS TOGGLE SWITCHES (Ionuț Colceriu)
-    Licensed under Unlicense 
     https://github.com/ghinda/css-toggle-switch
     ------------------------------------------ */
-    /* Candy Theme
-     * Based on the "Sort Switches / Toggles (PSD)" by Ormal Clarck
-     * http://www.premiumpixels.com/freebies/sort-switches-toggles-psd/
-     */
  
     .switch {
         background-color: #ffe;
@@ -684,9 +679,7 @@ textarea[contenteditable] { -webkit-appearance: none; }
     .switch .slide-button {
         background-color: #FA5B3C;
         background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
-        background-image:    -moz-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
         background-image:     -ms-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
-        background-image:      -o-linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
         background-image:         linear-gradient(top, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
         border: 1px solid #888;
         border-radius: 3px;
@@ -700,9 +693,7 @@ textarea[contenteditable] { -webkit-appearance: none; }
         width: 50%;
         z-index: 1;
         -webkit-transition: all 0.3s ease-in;
-           -moz-transition: all 0.3s ease-in;
             -ms-transition: all 0.3s ease-in;
-             -o-transition: all 0.3s ease-in;
                 transition: all 0.3s ease-in;
     }
 
@@ -714,7 +705,6 @@ textarea[contenteditable] { -webkit-appearance: none; }
         -webkit-box-sizing: border-box;
            -moz-box-sizing: border-box;
             -ms-box-sizing: border-box;
-             -o-box-sizing: border-box;
                 box-sizing: border-box;
     }
 

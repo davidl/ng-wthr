@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--[if lt IE 9]><html lang="en" ng-app="wthr" class="lt-ie9"><![endif]-->
 <!--[if gt IE 8]><!--><html lang="en" ng-app="wthr"><!--<![endif]-->
+<head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>ng-wthr</title>
@@ -21,18 +22,18 @@
 <body>
 <h1>ng-wthr</h1>
 <div class="wrapper" ng-controller="WeatherCtrl as vm">
-    <form id="search" ng-submit="vm.getWeatherByPlacename()">
-        <p>Get the temperature for</p>
-        <div ng-show="vm.geolocationAvailable">
-            <button type="button" id="current" ng-click="vm.getWeatherByLatLon()">current location<b class="icon-target"></b></button> or
+    <form name="search" ng-submit="getWeatherByPlacename()">
+        <p>Get the temperature using</p>
+        <div ng-show="geolocationAvailable">
+            <button type="button" id="current" ng-click="getWeatherByLatLon()">current location<b class="icon-target"></b></button> or
         </div>
-        <label for="place"><abbr title="United States">US</abbr> location (city, two-letter state)</label>
-        <input id="place" placeholder="US city, state" autofocus ng-model="vm.place">
+        <label for="place">city name</label>
+        <input id="place" placeholder="City name" title="Please enter a city name" ng-model="place" required>
         <button type="submit">Go</button>
-        <i class="icon-spin5 animate-spin" ng-show="vm.loading"></i>
         <span class="place-error">Please enter a place name</span>
+        <i class="icon-spin5 animate-spin" loading-widget></i>
     </form>
-    <div id="results" ng-model="vm.conditions" ng-show="conditions.name">
+    <div id="results" ng-model="vm.conditions" ng-show="conditions.name" ng-cloak>
         <h2 data-code="{{ conditions.code }}">{{ conditions.name }}</h2>
         <dl>
             <dt class="now visuallyhidden">Now</dt>
@@ -46,9 +47,9 @@
         </dl>
     </div>
     <div class="units-toggle switch">
-        <input type="radio" id="units-imperial" name="units" value="imperial" ng-change="vm.convertUnits()" ng-model="vm.units" checked>
+        <input type="radio" id="units-imperial" name="units" value="imperial" ng-change="convertUnits()" ng-model="units" checked>
         <label for="units-imperial"><abbr title="Farenheit">°F</abbr></label>
-        <input type="radio" id="units-metric" name="units" value="metric" ng-change="vm.convertUnits()" ng-model="vm.units">
+        <input type="radio" id="units-metric" name="units" value="metric" ng-change="convertUnits()" ng-model="units">
         <label for="units-metric"><abbr title="Celsuis">°C</abbr></label>
         <span class="slide-button"></span>
     </div>
