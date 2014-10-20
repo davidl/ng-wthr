@@ -367,7 +367,7 @@ form { text-align: center; }
 
 form .icon-spin5 {
     color: #999;
-    transition: all 0.2s;
+    transition: all 0.1s;
 }
 
 form.loading .icon-spin5,

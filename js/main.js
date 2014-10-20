@@ -87,23 +87,20 @@
         };
     }];
     
-    var loadingWidgetDirective = ['requestNotificationChannel', '$log', function (requestNotificationChannel, $log) {
+    var loadingWidgetDirective = ['requestNotificationChannel', function (requestNotificationChannel) {
         return {
             restrict: "A",
             link: function (scope, element) {
                 // hide the element initially
-                //element.hide();
                 element[0].style.visibility = 'hidden';
 
                 var startRequestHandler = function() {
                     // got the request start notification, show the element
-                    //element.show();
-                    element[0].style.visibility = 'visibile';
+                    element[0].style.visibility = 'visible';
                 };
 
                 var endRequestHandler = function() {
                     // got the request start notification, show the element
-                    //element.hide();
                     element[0].style.visibility = 'hidden';
                 };
 
