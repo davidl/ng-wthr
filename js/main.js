@@ -53,31 +53,30 @@
         $httpProvider.responseInterceptors.push(interceptor);
     }];
     
-    var requestNotificationChannelFactory = ['$rootScope', function($rootScope){
+    var requestNotificationChannelFactory = ['$rootScope', function ($rootScope) {
         // private notification messages
-        var _START_REQUEST_ = '_START_REQUEST_';
-        var _END_REQUEST_ = '_END_REQUEST_';
-
-        // publish start request notification
-        var requestStarted = function() {
-            $rootScope.$broadcast(_START_REQUEST_);
-        };
-        // publish end request notification
-        var requestEnded = function() {
-            $rootScope.$broadcast(_END_REQUEST_);
-        };
-        // subscribe to start request notification
-        var onRequestStarted = function($scope, handler){
-            $scope.$on(_START_REQUEST_, function(event){
-                handler();
-            });
-        };
-        // subscribe to end request notification
-        var onRequestEnded = function($scope, handler){
-            $scope.$on(_END_REQUEST_, function(event){
-                handler();
-            });
-        };
+        var startRequest = '_START_REQUEST_',
+            endRequest = '_END_REQUEST_',
+            // publish start request notification
+            requestStarted = function () {
+                $rootScope.$broadcast(startRequest);
+            },
+            // publish end request notification
+            requestEnded = function () {
+                $rootScope.$broadcast(endRequest);
+            },
+            // subscribe to start request notification
+            onRequestStarted = function ($scope, handler) {
+                $scope.$on(startRequest, function (event) {
+                    handler();
+                });
+            },
+            // subscribe to end request notification
+            onRequestEnded = function ($scope, handler) {
+                $scope.$on(endRequest, function (event) {
+                    handler();
+                });
+            };
 
         return {
             requestStarted:  requestStarted,
@@ -94,12 +93,12 @@
                 // hide the element initially
                 element[0].style.visibility = 'hidden';
 
-                var startRequestHandler = function() {
+                var startRequestHandler = function () {
                     // got the request start notification, show the element
                     element[0].style.visibility = 'visible';
                 };
 
-                var endRequestHandler = function() {
+                var endRequestHandler = function () {
                     // got the request start notification, show the element
                     element[0].style.visibility = 'hidden';
                 };
@@ -187,6 +186,8 @@
         $scope.conditions = {};
         $scope.units = 'imperial';
         $scope.geolocationAvailable = !!navigator.geolocation;
+        $scope.showError = false;
+        $scope.errorMessage = 'An error occured. Please try again.';
 
         /**
          * @name getWeatherByPlacename
@@ -226,6 +227,7 @@
          * @param {Object} queryData
          */
         $scope.getWeather = function (queryData) {
+            $scope.showError = false;
             queryData.units = this.units;
             $log.log(queryData);
             $http
@@ -242,6 +244,7 @@
                 })
                 .error(function () {
                     $log.error('Error calling OpenWeatherMap API');
+                    $scope.showError = true;
                 });
         };
 

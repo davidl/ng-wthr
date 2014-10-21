@@ -385,12 +385,10 @@ label[for=place] {
     margin: 1em 0;
 }
 
-.place-error {
+.error-message {
     color: #B22;
     display: block;
     font-size: 0.9em;
-    opacity: 0;
-    text-indent: -7.6ex;
     transition: all .4s ease-in;
 }
 
@@ -444,7 +442,7 @@ h2 {
     position: absolute;
     right: 0;
     speak: none;
-    top: -0.5ex;
+    top: -0.4ex;
     width: 1em;
     z-index: -1;
 }
@@ -521,6 +519,20 @@ dd { margin: 0; }
 /* Accommodate IE < 9: */
 .lt-ie9 .switch label + input {
     margin-left: 1em;
+}
+
+footer {
+    bottom: 0.5ex;
+    color: #595959;
+    font-size: 0.8em;
+    position: absolute;
+    text-align: center;
+    width: 90%;
+}
+
+footer a:link,
+footer a:visited {
+    color: #494959;
 }
 
 /* ==========================================================================
@@ -615,6 +627,13 @@ textarea[contenteditable] { -webkit-appearance: none; }
  * Include this rule to trigger hasLayout and contain floats.
  */
 .clearfix { *zoom: 1; }
+
+/*
+ * Angular CSS:
+ */
+[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
 
 /* ==========================================================================
    Media Queries

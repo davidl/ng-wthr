@@ -28,9 +28,9 @@
             <button type="button" id="current" ng-click="getWeatherByLatLon()">current location<b class="icon-target"></b></button> or
         </div>
         <label for="place">city name</label>
-        <input id="place" placeholder="City name" title="Please enter a city name" ng-model="place" required>
+        <input id="place" placeholder="Place name" title="Please enter a place name" ng-model="place" required>
         <button type="submit">Go</button>
-        <span class="place-error">Please enter a place name</span>
+        <span class="error-message" ng-show="showError">{{ errorMessage }}</span>
         <i class="icon-spin5 animate-spin" loading-widget></i>
     </form>
     <div id="results" ng-model="vm.conditions" ng-show="conditions.name" ng-cloak>
@@ -54,6 +54,7 @@
         <span class="slide-button"></span>
     </div>
 </div>
+<footer>Weather data from <a href="http://www.openweathermap.org/">OpenWeatherMap</a></footer>
 <script src="js/vendor/angular.min.js"></script>
 <script src="js/main.js"></script>
 </body>
