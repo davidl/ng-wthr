@@ -4,7 +4,7 @@
  * Attempts to follow the styleguide by @toddmotto: https://github.com/toddmotto/angularjs-styleguide
  * Checked via JSLint
  */
-/*global angular*/
+/*global angular, navigator, document*/
 (function () {
     'use strict';
     var httpProviderConfig = [
@@ -71,13 +71,13 @@
                     },
                     // subscribe to start request notification
                     onRequestStarted = function ($scope, handler) {
-                        $scope.$on(startRequest, function (event) {
+                        $scope.$on(startRequest, function () {
                             handler();
                         });
                     },
                     // subscribe to end request notification
                     onRequestEnded = function ($scope, handler) {
-                        $scope.$on(endRequest, function (event) {
+                        $scope.$on(endRequest, function () {
                             handler();
                         });
                     };
@@ -89,7 +89,6 @@
                 };
             }
         ],
-    
         loadingWidgetDirective = [
             'requestNotificationChannel',
             function (requestNotificationChannel) {
@@ -113,10 +112,10 @@
                 return returnObject;
             }
         ];
-   
+
     // Service
     function weatherHelpers() {
-        var returnObject;
+        var weatherHelpersReturnObject;
         /**
          * @name processResults
          * @desc Simplify the weather data returned from API
@@ -125,7 +124,7 @@
          */
         function processResults(data) {
             var conditions = [],
-                returnObject;
+                processResultsReturnObject;
             conditions.code = data.weather[0].id;
             conditions.name = data.name;
             conditions.current = Math.round(data.main.temp);
@@ -133,10 +132,10 @@
             conditions.high = Math.round(data.main.temp_max);
             conditions.descriptionFull = data.weather[0].description;
             conditions.description = data.weather[0].main;
-            returnObject = {
+            processResultsReturnObject = {
                 conditions: conditions
             };
-            return returnObject;
+            return processResultsReturnObject;
         }
         /**
          * @name fToC
@@ -178,12 +177,12 @@
             }
             return conditions;
         }
-        returnObject = {
+        weatherHelpersReturnObject = {
             processResults: processResults,
             fToC: fToC,
             cToF: cToF
         };
-        return returnObject;
+        return weatherHelpersReturnObject;
     }
 
     // Controller
@@ -199,7 +198,7 @@
          * @desc Show error message
          */
         $scope.showErrorMessage = function (message) {
-            $scope.errorMessage = typeof message !== 'undefined' ? message : $scope.errorMessageDefault;
+            $scope.errorMessage = message !== 'undefined' ? message : $scope.errorMessageDefault;
             $scope.showError = true;
             $scope.$digest();
         };
@@ -240,7 +239,6 @@
         $scope.getWeather = function (queryData) {
             $scope.showError = false;
             queryData.units = this.units;
-            $log.log(queryData);
             $http
                 .get('http://api.openweathermap.org/data/2.5/weather', {
                     params: queryData
