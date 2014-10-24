@@ -354,7 +354,7 @@ h2 {
 
 h1 {
     padding: 0 1ex;
-    font-size: 4.5em;
+    font-size: 3em;
     line-height: 1;
     font-weight: normal;
     margin: 0;
@@ -367,6 +367,7 @@ form { text-align: center; }
 
 form .icon-spin5 {
     color: #999;
+    display: block;
     transition: all 0.1s;
 }
 
@@ -379,11 +380,6 @@ form.loading .icon-spin5,
 
 /* Hide geolocation-dependent features if not supported: */
 .no-geolocation .geolocation { display: none; }
-
-label[for=place] {
-    display: block;
-    margin: 1em 0;
-}
 
 .error-message {
     color: #B22;
@@ -641,6 +637,7 @@ textarea[contenteditable] { -webkit-appearance: none; }
    ========================================================================== */
 
 @media only screen and (min-width: 480px) {
+    h1 { font-size: 4.5em; }
     h2 { text-align: center; }
 }
 

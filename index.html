@@ -24,10 +24,8 @@
 <div class="wrapper" ng-controller="WeatherCtrl as vm">
     <form name="search" ng-submit="getWeatherByPlacename()">
         <p>Get the temperature using</p>
-        <div ng-show="geolocationAvailable">
-            <button type="button" id="current" ng-click="getWeatherByLatLon()">current location<b class="icon-target"></b></button> or
-        </div>
-        <label for="place">city name</label>
+        <p ng-show="geolocationAvailable"><button type="button" id="current" ng-click="getWeatherByLatLon()">current location<b class="icon-target"></b></button> or</p>
+        <label for="place" class="visuallyhidden">place name</label>
         <input id="place" placeholder="Place name" title="Please enter a place name" ng-model="place" required>
         <button type="submit">Go</button>
         <span class="error-message" ng-show="showError">{{ errorMessage }}</span>

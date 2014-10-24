@@ -7,111 +7,116 @@
 /*global angular*/
 (function () {
     'use strict';
-    
-    var httpProviderConfig = ['$httpProvider', function ($httpProvider) {
-        // Using Jim Lavin's Publish/Subscribe Pattern approach:
-        // http://codingsmackdown.tv/blog/2013/04/20/using-response-interceptors-to-show-and-hide-a-loading-widget-redux/
-        var $http,
-            interceptor = ['$q', '$injector', function ($q, $injector) {
-                var notificationChannel;
-
-                function success(response) {
-                    // get $http via $injector because of circular dependency problem
-                    $http = $http || $injector.get('$http');
-                    // don't send notification until all requests are complete
-                    if ($http.pendingRequests.length < 1) {
-                        // get requestNotificationChannel via $injector because of circular dependency problem
-                        notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
-                        // send a notification requests are complete
-                        notificationChannel.requestEnded();
+    var httpProviderConfig = [
+        '$httpProvider',
+        function ($httpProvider) {
+            // Using Jim Lavin's Publish/Subscribe Pattern approach:
+            // http://codingsmackdown.tv/blog/2013/04/20/using-response-interceptors-to-show-and-hide-a-loading-widget-redux/
+            var $http,
+                interceptor = [
+                    '$q',
+                    '$injector',
+                    function ($q, $injector) {
+                        var notificationChannel;
+                        function success(response) {
+                            // get $http via $injector because of circular dependency problem
+                            $http = $http || $injector.get('$http');
+                            // don't send notification until all requests are complete
+                            if ($http.pendingRequests.length < 1) {
+                                // get requestNotificationChannel via $injector because of circular dependency problem
+                                notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
+                                // send a notification requests are complete
+                                notificationChannel.requestEnded();
+                            }
+                            return response;
+                        }
+                        function error(response) {
+                            // get $http via $injector because of circular dependency problem
+                            $http = $http || $injector.get('$http');
+                            // don't send notification until all requests are complete
+                            if ($http.pendingRequests.length < 1) {
+                                // get requestNotificationChannel via $injector because of circular dependency problem
+                                notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
+                                // send a notification requests are complete
+                                notificationChannel.requestEnded();
+                            }
+                            return $q.reject(response);
+                        }
+                        function returnObject(promise) {
+                            // get requestNotificationChannel via $injector because of circular dependency problem
+                            notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
+                            // send a notification requests are complete
+                            notificationChannel.requestStarted();
+                            return promise.then(success, error);
+                        }
+                        return returnObject;
                     }
-                    return response;
-                }
-
-                function error(response) {
-                    // get $http via $injector because of circular dependency problem
-                    $http = $http || $injector.get('$http');
-                    // don't send notification until all requests are complete
-                    if ($http.pendingRequests.length < 1) {
-                        // get requestNotificationChannel via $injector because of circular dependency problem
-                        notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
-                        // send a notification requests are complete
-                        notificationChannel.requestEnded();
-                    }
-                    return $q.reject(response);
-                }
-
-                return function (promise) {
-                    // get requestNotificationChannel via $injector because of circular dependency problem
-                    notificationChannel = notificationChannel || $injector.get('requestNotificationChannel');
-                    // send a notification requests are complete
-                    notificationChannel.requestStarted();
-                    return promise.then(success, error);
-                }
-            }];
-
-        $httpProvider.responseInterceptors.push(interceptor);
-    }];
-    
-    var requestNotificationChannelFactory = ['$rootScope', function ($rootScope) {
-        // private notification messages
-        var startRequest = '_START_REQUEST_',
-            endRequest = '_END_REQUEST_',
-            // publish start request notification
-            requestStarted = function () {
-                $rootScope.$broadcast(startRequest);
-            },
-            // publish end request notification
-            requestEnded = function () {
-                $rootScope.$broadcast(endRequest);
-            },
-            // subscribe to start request notification
-            onRequestStarted = function ($scope, handler) {
-                $scope.$on(startRequest, function (event) {
-                    handler();
-                });
-            },
-            // subscribe to end request notification
-            onRequestEnded = function ($scope, handler) {
-                $scope.$on(endRequest, function (event) {
-                    handler();
-                });
-            };
-
-        return {
-            requestStarted:  requestStarted,
-            requestEnded: requestEnded,
-            onRequestStarted: onRequestStarted,
-            onRequestEnded: onRequestEnded
-        };
-    }];
-    
-    var loadingWidgetDirective = ['requestNotificationChannel', function (requestNotificationChannel) {
-        return {
-            restrict: "A",
-            link: function (scope, element) {
-                // hide the element initially
-                element[0].style.visibility = 'hidden';
-
-                var startRequestHandler = function () {
-                    // got the request start notification, show the element
-                    element[0].style.visibility = 'visible';
+                ];
+            $httpProvider.responseInterceptors.push(interceptor);
+        }
+    ],
+        requestNotificationChannelFactory = [
+            '$rootScope',
+            function ($rootScope) {
+                // private notification messages
+                var startRequest = '_START_REQUEST_',
+                    endRequest = '_END_REQUEST_',
+                    // publish start request notification
+                    requestStarted = function () {
+                        $rootScope.$broadcast(startRequest);
+                    },
+                    // publish end request notification
+                    requestEnded = function () {
+                        $rootScope.$broadcast(endRequest);
+                    },
+                    // subscribe to start request notification
+                    onRequestStarted = function ($scope, handler) {
+                        $scope.$on(startRequest, function (event) {
+                            handler();
+                        });
+                    },
+                    // subscribe to end request notification
+                    onRequestEnded = function ($scope, handler) {
+                        $scope.$on(endRequest, function (event) {
+                            handler();
+                        });
+                    };
+                return {
+                    requestStarted: requestStarted,
+                    requestEnded: requestEnded,
+                    onRequestStarted: onRequestStarted,
+                    onRequestEnded: onRequestEnded
                 };
-
-                var endRequestHandler = function () {
-                    // got the request start notification, show the element
-                    element[0].style.visibility = 'hidden';
-                };
-
-                requestNotificationChannel.onRequestStarted(scope, startRequestHandler);
-
-                requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
             }
-        };
-    }];
+        ],
+    
+        loadingWidgetDirective = [
+            'requestNotificationChannel',
+            function (requestNotificationChannel) {
+                var returnObject = {
+                    restrict: "A",
+                    link: function (scope, element) {
+                        // hide the element initially
+                        element[0].style.visibility = 'hidden';
+                        var startRequestHandler = function () {
+                            // got the request start notification, show the element
+                            element[0].style.visibility = 'visible';
+                        },
+                            endRequestHandler = function () {
+                                // got the request start notification, show the element
+                                element[0].style.visibility = 'hidden';
+                            };
+                        requestNotificationChannel.onRequestStarted(scope, startRequestHandler);
+                        requestNotificationChannel.onRequestEnded(scope, endRequestHandler);
+                    }
+                };
+                return returnObject;
+            }
+        ];
    
     // Service
     function weatherHelpers() {
+        var returnObject;
         /**
          * @name processResults
          * @desc Simplify the weather data returned from API
@@ -119,7 +124,8 @@
          * @returns {Array} conditions
          */
         function processResults(data) {
-            var conditions = [];
+            var conditions = [],
+                returnObject;
             conditions.code = data.weather[0].id;
             conditions.name = data.name;
             conditions.current = Math.round(data.main.temp);
@@ -127,11 +133,11 @@
             conditions.high = Math.round(data.main.temp_max);
             conditions.descriptionFull = data.weather[0].description;
             conditions.description = data.weather[0].main;
-            return {
+            returnObject = {
                 conditions: conditions
             };
+            return returnObject;
         }
-
         /**
          * @name fToC
          * @desc Convert certain values to Celsius (from Fahrenheit)
@@ -152,7 +158,6 @@
             }
             return conditions;
         }
-
         /**
          * @name cToF
          * @desc Convert certain values to Fahrenheit (from Celsius)
@@ -173,12 +178,12 @@
             }
             return conditions;
         }
-
-        return {
+        returnObject = {
             processResults: processResults,
             fToC: fToC,
             cToF: cToF
         };
+        return returnObject;
     }
 
     // Controller
@@ -187,8 +192,17 @@
         $scope.units = 'imperial';
         $scope.geolocationAvailable = !!navigator.geolocation;
         $scope.showError = false;
-        $scope.errorMessage = 'An error occured. Please try again.';
-
+        $scope.errorMessageDefault = 'An error occured. Please try again.';
+        $scope.errorMessage = $scope.errorMessageDefault;
+        /**
+         * @name showError
+         * @desc Show error message
+         */
+        $scope.showErrorMessage = function (message) {
+            $scope.errorMessage = typeof message !== 'undefined' ? message : $scope.errorMessageDefault;
+            $scope.showError = true;
+            $scope.$digest();
+        };
         /**
          * @name getWeatherByPlacename
          * @desc Call getWeather() with a place name
@@ -201,7 +215,6 @@
                 'q': $scope.place
             });
         };
-
         /**
          * @name getWeatherByLatLon
          * @desc Obtain geolocation from the browser and call getWeather() with lat/lon
@@ -213,14 +226,12 @@
                     'lon': position.coords.longitude
                 });
             }
-
             function geoError(error) {
-                $log.error('ERROR(' + error.code + '): ' + error.message);
+                $scope.showErrorMessage('Oops! Please enter a place name instead.');
+                $log.error('ERROR (code: ' + error.code + '): ' + error.message);
             }
-
             navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
         };
-
         /**
          * @name getWeather
          * @desc Call Open Weather Map API
@@ -239,15 +250,15 @@
                     if (data.cod === 200) {
                         $scope.conditions = weatherHelpers.processResults(data).conditions;
                     } else {
+                        $scope.showError = true;
                         $log.error('Error calling OpenWeatherMap API (data)');
                     }
                 })
                 .error(function () {
+                    $scope.showErrorMessage();
                     $log.error('Error calling OpenWeatherMap API');
-                    $scope.showError = true;
                 });
         };
-
         /**
          * @name convertUnits
          * @desc Call the appropriate service function to convert temperature values.
@@ -256,7 +267,6 @@
             $scope.conditions = $scope.units === 'metric' ? weatherHelpers.fToC($scope.conditions) : weatherHelpers.cToF($scope.conditions);
         };
     }
-
     angular
         .module('wthr', [])
         .run(function ($timeout) {
@@ -269,5 +279,4 @@
         .directive('loadingWidget', loadingWidgetDirective)
         .service('weatherHelpers', weatherHelpers)
         .controller('WeatherCtrl', WeatherCtrl);
-
 }());
