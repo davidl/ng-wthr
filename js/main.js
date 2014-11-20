@@ -196,6 +196,7 @@
         /**
          * @name showError
          * @desc Show error message
+         * @param {String} message
          */
         $scope.showErrorMessage = function (message) {
             $scope.errorMessage = message !== 'undefined' ? message : $scope.errorMessageDefault;
