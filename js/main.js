@@ -240,6 +240,7 @@
         $scope.getWeather = function (queryData) {
             $scope.showError = false;
             queryData.units = this.units;
+            queryData.appid = 'af39924c763c276456f725c8e4964564';
             $http
                 .get('http://api.openweathermap.org/data/2.5/weather', {
                     params: queryData
